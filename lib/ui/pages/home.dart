@@ -127,7 +127,11 @@ class _HomePageState extends State<HomePage> {
       onDateChange: (selectedDate) {
         setState(() {
           currentDate = selectedDate;
-          _pageController.jumpToPage(currentPageValue + currentDate.difference(DateTime.now()).inDays);
+
+          // TODO: refactor this in a way that actually makes sense.
+          int toJump = currentPageValue + currentDate.difference(DateTime.now()).inDays;
+          if (currentDate.isAfter(DateTime.now())) toJump++;
+          _pageController.jumpToPage(toJump);
         });
       },
       activeColor: Theme.of(context).colorScheme.primaryContainer,
