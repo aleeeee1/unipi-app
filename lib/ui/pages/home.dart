@@ -13,6 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  GlobalKey timeLineKey = GlobalKey();
   InternalAPI internalAPI = Get.find<InternalAPI>();
 
   final EasyInfiniteDateTimelineController _controller = EasyInfiniteDateTimelineController();
@@ -118,6 +119,7 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return EasyInfiniteDateTimeLine(
+      key: timeLineKey,
       controller: _controller,
       //
       firstDate: DateTime(DateTime.september),
