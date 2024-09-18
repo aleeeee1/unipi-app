@@ -4,6 +4,9 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:get/get.dart';
 import 'package:unipi_orario/services/internal_api.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
+import 'package:unipi_orario/services/wrapper_impl.dart';
+import 'package:unipi_orario/ui/components/home/event.dart';
+import 'package:unipi_orario_wrapper/unipi_orario_wrapper.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -172,17 +175,51 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget eventsList() {
+    final future = getLessons();
+
     return Expanded(
       child: PageView.builder(
         controller: _pageController,
         onPageChanged: _onPageChanged,
         itemBuilder: (context, index) {
           DateTime date = DateTime.now().add(Duration(days: index - currentPageValue));
+          GlobalKey futureBuilderKey = GlobalKey();
 
-          return Center(
-            child: Text(
-              date.toString(),
-            ),
+          return FutureBuilder(
+            key: futureBuilderKey,
+            future: future,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    snapshot.error.toString(),
+                  ),
+                );
+              }
+
+              List<Lesson> lessons = snapshot.data as List<Lesson>;
+
+              List<Lesson> filteredLessons = lessons.where(
+                (lesson) {
+                  return lesson.startDateTime.day == date.day && //
+                      lesson.startDateTime.month == date.month &&
+                      lesson.startDateTime.year == date.year;
+                },
+              ).toList();
+
+              return ListView.builder(
+                itemCount: filteredLessons.length,
+                itemBuilder: (context, index) {
+                  return Event(lesson: filteredLessons[index]);
+                },
+              );
+            },
           );
         },
       ),
