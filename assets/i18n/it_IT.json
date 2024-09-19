@@ -12,5 +12,8 @@
         "october": "Ottobre",
         "november": "Novembre",
         "december": "Dicembre"
+    },
+    "home": {
+        "noEvents": "Nessun evento trovato per oggi"
     }
 }

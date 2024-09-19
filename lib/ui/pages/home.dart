@@ -1,12 +1,16 @@
+import 'dart:math';
+
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:get/get.dart';
+import 'package:unipi_orario/entities/lesson.dart';
+import 'package:unipi_orario/helper/object_box.dart';
 import 'package:unipi_orario/services/internal_api.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:unipi_orario/services/wrapper_impl.dart';
 import 'package:unipi_orario/ui/components/home/event.dart';
-import 'package:unipi_orario_wrapper/unipi_orario_wrapper.dart';
+import 'package:unipi_orario/utils/globals.dart' as globals;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,7 +21,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   GlobalKey timeLineKey = GlobalKey();
+
   InternalAPI internalAPI = Get.find<InternalAPI>();
+  ObjectBox objectBox = Get.find<ObjectBox>();
 
   final EasyInfiniteDateTimelineController _controller = EasyInfiniteDateTimelineController();
   DateTime currentDate = DateTime.now();
@@ -175,19 +181,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget eventsList() {
-    final future = getLessons();
-
     return Expanded(
       child: PageView.builder(
         controller: _pageController,
         onPageChanged: _onPageChanged,
         itemBuilder: (context, index) {
           DateTime date = DateTime.now().add(Duration(days: index - currentPageValue));
-          GlobalKey futureBuilderKey = GlobalKey();
 
           return FutureBuilder(
-            key: futureBuilderKey,
-            future: future,
+            future: getLessonsFromCache(
+              date: date,
+            ),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
@@ -203,21 +207,48 @@ class _HomePageState extends State<HomePage> {
                 );
               }
 
-              List<Lesson> lessons = snapshot.data as List<Lesson>;
+              List<Lesson?> lessons = snapshot.data!;
+              debugPrint(lessons.toString());
 
-              List<Lesson> filteredLessons = lessons.where(
-                (lesson) {
-                  return lesson.startDateTime.day == date.day && //
-                      lesson.startDateTime.month == date.month &&
-                      lesson.startDateTime.year == date.year;
-                },
-              ).toList();
+              if (lessons.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        globals.randomFaces[Random().nextInt(globals.randomFaces.length)],
+                        style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                      ),
+                      const SizedBox(height: 10),
+                      I18nText(
+                        'home.noEvents',
+                        child: Text(
+                          "",
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
 
-              return ListView.builder(
-                itemCount: filteredLessons.length,
-                itemBuilder: (context, index) {
-                  return Event(lesson: filteredLessons[index]);
-                },
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 10,
+                ),
+                child: ListView.builder(
+                  itemCount: lessons.length,
+                  itemBuilder: (context, index) {
+                    return Event(
+                      lesson: lessons[index]!,
+                    );
+                  },
+                ),
               );
             },
           );
