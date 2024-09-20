@@ -21,14 +21,30 @@ class EventState extends State<Event> {
       color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.45),
       shadowColor: Colors.transparent,
       child: ListTile(
-        title: Text(widget.lesson.name),
+        title: Text(
+          widget.lesson.name,
+          overflow: TextOverflow.ellipsis,
+        ),
         subtitle: Text(
           '${DateFormat('HH:mm').format(widget.lesson.startDateTime)} - ${DateFormat('HH:mm').format(widget.lesson.endDateTime)}',
         ),
         leading: CircleAvatar(
           child: Text(
-            widget.lesson.courseName.replaceAll("CORSO ", ""),
+            widget.lesson.roomName.replaceAll("Fib ", ""),
           ),
+        ),
+        trailing: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              widget.lesson.courseName,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.secondary.withOpacity(
+                          0.5,
+                        ),
+                  ),
+            ),
+          ],
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),

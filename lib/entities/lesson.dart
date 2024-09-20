@@ -8,6 +8,7 @@ class Lesson {
 
   final String name;
   final String courseName;
+  final String roomName;
 
   @Property(type: PropertyType.date)
   final DateTime startDateTime;
@@ -20,6 +21,7 @@ class Lesson {
     required this.startDateTime,
     required this.endDateTime,
     required this.courseName,
+    required this.roomName,
   });
 
   factory Lesson.fromJson(Map<String, dynamic> json) {
@@ -30,11 +32,12 @@ class Lesson {
       startDateTime: parsedDates[0],
       endDateTime: parsedDates[1],
       courseName: json['fattoreDiPartizione'][0]['partizioni'][0]['descrizione'],
+      roomName: json['aule'][0]['descrizione'],
     );
   }
 
   @override
   String toString() {
-    return 'Lesson{name: $name, startDateTime: $startDateTime, endDateTime: $endDateTime, courseName: $courseName}';
+    return 'Lesson{name: $name, startDateTime: $startDateTime, endDateTime: $endDateTime, courseName: $courseName}, roomName: $roomName';
   }
 }

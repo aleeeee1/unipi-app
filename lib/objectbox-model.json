@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:1841969985360152617",
-      "lastPropertyId": "5:2304252875669842203",
+      "lastPropertyId": "6:498066942534562267",
       "name": "Lesson",
       "properties": [
         {
@@ -33,6 +33,11 @@
           "id": "5:2304252875669842203",
           "name": "endDateTime",
           "type": 10
+        },
+        {
+          "id": "6:498066942534562267",
+          "name": "roomName",
+          "type": 9
         }
       ],
       "relations": []
