@@ -42,6 +42,7 @@ Future<void> cacheLessons() async {
   List<Lesson> lessons = await getLessons();
 
   var box = objectBox.lessonBox;
+  await box.removeAllAsync();
   await box.putManyAsync(lessons);
 }
 
