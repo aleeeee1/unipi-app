@@ -236,6 +236,9 @@ class _HomePageState extends State<HomePage> {
                 );
               }
 
+              lessons = lessons.where((element) {
+                return internalAPI.filteringCourses.contains(element!.courseName);
+              }).toList();
               return Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
@@ -257,6 +260,53 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget filterList() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 10,
+        right: 10,
+        top: 10,
+      ),
+      child: SizedBox(
+        height: 40,
+        child: FutureBuilder(
+          future: getAllCourses(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            var data = snapshot.data!;
+            return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 7),
+                  child: FilterChip(
+                    label: Text(data[index]),
+                    selected: internalAPI.filteringCourses.contains(data[index]),
+                    onSelected: (bool value) {
+                      if (value) {
+                        internalAPI.addFilteringCourse(data[index]);
+                      } else {
+                        internalAPI.removeFilteringCourse(data[index]);
+                      }
+                      setState(() {});
+                    },
+                    visualDensity: VisualDensity.compact,
+                  ),
+                );
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+
   void _onPageChanged(int page) {
     setState(() {
       currentDate = DateTime.now().add(Duration(days: page - currentPageValue));
@@ -269,6 +319,7 @@ class _HomePageState extends State<HomePage> {
       mainAxisSize: MainAxisSize.max,
       children: [
         timeLine(),
+        filterList(),
         eventsList(),
       ],
     );

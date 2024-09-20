@@ -47,6 +47,23 @@ Future<void> cacheLessons() async {
   await box.putManyAsync(lessons);
 }
 
+Future<List<String>> getAllCourses() async {
+  var box = objectBox.lessonBox;
+  var lessons = await box.getAllAsync();
+
+  if (lessons.isEmpty) {
+    await cacheLessons();
+    return await getAllCourses();
+  }
+
+  Set<String> courses = {};
+  for (var lesson in lessons) {
+    courses.add(lesson.courseName);
+  }
+
+  return courses.toList();
+}
+
 Future<List<Lesson>> getLessons() async {
   var lessons = await wrapper.fetchLessons(
     calendarId: internalAPI.calendarId,

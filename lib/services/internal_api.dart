@@ -18,11 +18,24 @@ class InternalAPI {
   bool get isDynamicTheme => prefs.getBool('isDynamicTheme') ?? false;
   String get calendarId => prefs.getString('calendarId') ?? '6319d930e209821793111b45';
   String get clientId => prefs.getString('clientId') ?? '';
+  List<String> get filteringCourses => prefs.getStringList('filteringCourses') ?? [];
 
   set isDarkMode(bool value) => prefs.setBool('isDarkMode', value);
   set isDynamicTheme(bool value) => prefs.setBool('isDynamicTheme', value);
   set calendarId(String value) => prefs.setString('calendarId', value);
   set clientId(String value) => prefs.setString('clientId', value);
+
+  void addFilteringCourse(String course) {
+    List<String> courses = filteringCourses;
+    courses.add(course);
+    prefs.setStringList('filteringCourses', courses);
+  }
+
+  void removeFilteringCourse(String course) {
+    List<String> courses = filteringCourses;
+    courses.remove(course);
+    prefs.setStringList('filteringCourses', courses);
+  }
 
   Future<bool> isDynamicThemeSupported() async {
     if (Platform.isAndroid && !kIsWeb) {
