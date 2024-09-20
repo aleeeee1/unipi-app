@@ -27,6 +27,7 @@ Future<List<Lesson>> getLessonsFromCache({
           ),
         ),
       )
+      .order(Lesson_.startDateTime)
       .build()
       .findAsync();
 
@@ -46,7 +47,7 @@ Future<void> cacheLessons() async {
   await box.putManyAsync(lessons);
 }
 
-Future<List<Lesson>> getLessons({bool forceRefresh = false}) async {
+Future<List<Lesson>> getLessons() async {
   var lessons = await wrapper.fetchLessons(
     calendarId: internalAPI.calendarId,
     startDate: DateTime(2024, 9, 16),
