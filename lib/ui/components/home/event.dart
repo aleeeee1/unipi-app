@@ -17,9 +17,9 @@ class EventState extends State<Event> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 5,
       margin: const EdgeInsets.symmetric(vertical: 2),
-      color: Theme.of(context).colorScheme.onSecondaryFixed,
+      color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.45),
+      shadowColor: Colors.transparent,
       child: ListTile(
         title: Text(widget.lesson.name),
         subtitle: Text(
