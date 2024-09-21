@@ -162,6 +162,9 @@ class _HomePageState extends State<HomePage> {
         height: 80,
       ),
       headerBuilder: (context, date) {
+        DateTime now = DateTime.now();
+        bool isToday = now.day == currentDate.day && now.month == currentDate.month && now.year == currentDate.year;
+
         return Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 10,
@@ -177,6 +180,22 @@ class _HomePageState extends State<HomePage> {
                   fontWeight: FontWeight.w800,
                 ),
               ),
+              if (!isToday)
+                IconButton(
+                  onPressed: () {
+                    _controller.animateToCurrentData();
+
+                    setState(() {
+                      currentDate = DateTime.now();
+                    });
+
+                    // TODO: refactor this too in a way that actually makes sense.
+                    int toJump = currentPageValue + currentDate.difference(DateTime.now()).inDays;
+                    if (currentDate.isAfter(DateTime.now())) toJump++;
+                    _pageController.jumpToPage(toJump);
+                  },
+                  icon: const Icon(Icons.restore),
+                )
             ],
           ),
         );
