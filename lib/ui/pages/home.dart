@@ -4,6 +4,7 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:get/get.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:unipi_orario/entities/lesson.dart';
 import 'package:unipi_orario/helper/object_box.dart';
 import 'package:unipi_orario/services/internal_api.dart';
@@ -197,8 +198,30 @@ class _HomePageState extends State<HomePage> {
             ),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                Lesson fakeLesson = Lesson(
+                  courseName: "Corso b",
+                  endDateTime: DateTime.now(),
+                  startDateTime: DateTime.now(),
+                  name: "Neanche",
+                  roomName: "D2",
+                );
+                List<Lesson> lessons = [for (int i = 0; i < 2; i++) fakeLesson];
+
+                return Skeletonizer(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 10,
+                    ),
+                    child: ListView.builder(
+                      itemCount: lessons.length,
+                      itemBuilder: (context, index) {
+                        return Event(
+                          lesson: lessons[index],
+                        );
+                      },
+                    ),
+                  ),
                 );
               }
 
@@ -276,8 +299,25 @@ class _HomePageState extends State<HomePage> {
           future: futureWithCourses,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
+              List<String> data = ["CORSO A", "CORSO B", "CORSO C"];
+              int randomIdx = Random().nextInt(data.length - 1);
+
+              return Skeletonizer(
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 7),
+                      child: FilterChip(
+                        label: Text(data[index]),
+                        selected: randomIdx == index,
+                        onSelected: (bool value) {},
+                        visualDensity: VisualDensity.compact,
+                      ),
+                    );
+                  },
+                ),
               );
             }
 
