@@ -31,10 +31,13 @@ class _HomePageState extends State<HomePage> {
   late PageController _pageController;
   int currentPageValue = 10000;
 
+  late Future<List<String>> futureWithCourses;
+
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: currentPageValue);
+    futureWithCourses = getAllCourses();
   }
 
   PreferredSizeWidget appBar() {
@@ -270,7 +273,7 @@ class _HomePageState extends State<HomePage> {
       child: SizedBox(
         height: 40,
         child: FutureBuilder(
-          future: getAllCourses(),
+          future: futureWithCourses,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
