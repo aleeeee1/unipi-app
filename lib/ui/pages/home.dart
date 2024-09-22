@@ -9,6 +9,7 @@ import 'package:unipi_orario/entities/lesson.dart';
 import 'package:unipi_orario/helper/object_box.dart';
 import 'package:unipi_orario/services/internal_api.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
+import 'package:unipi_orario/services/routes.dart';
 import 'package:unipi_orario/services/wrapper_impl.dart';
 import 'package:unipi_orario/ui/components/home/event.dart';
 import 'package:unipi_orario/utils/globals.dart' as globals;
@@ -43,6 +44,15 @@ class _HomePageState extends State<HomePage> {
 
   PreferredSizeWidget appBar() {
     return AppBar(
+      leading: IconButton(
+        icon: const Hero(
+          tag: 'infoIcon',
+          child: Icon(Icons.info_outline),
+        ),
+        onPressed: () {
+          Get.toNamed(RouteGenerator.settingsPageRoute);
+        },
+      ),
       actions: [
         ThemeSwitcher(
           builder: (ctx) => InkWell(
