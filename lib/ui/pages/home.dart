@@ -222,9 +222,7 @@ class _HomePageState extends State<HomePage> {
           DateTime date = DateTime.now().add(Duration(days: index - currentPageValue));
 
           return FutureBuilder(
-            future: getLessonsFromCache(
-              date: date,
-            ),
+            future: getLessonsForDay(date),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 Lesson fakeLesson = Lesson(
@@ -263,7 +261,6 @@ class _HomePageState extends State<HomePage> {
               }
 
               List<Lesson?> lessons = snapshot.data!;
-              debugPrint(lessons.toString());
 
               if (lessons.isEmpty) {
                 return Center(
