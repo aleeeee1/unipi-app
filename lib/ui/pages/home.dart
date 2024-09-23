@@ -260,7 +260,7 @@ class _HomePageState extends State<HomePage> {
                 );
               }
 
-              List<Lesson?> lessons = snapshot.data!;
+              List<Lesson?> lessons = snapshot.data ?? [];
 
               if (lessons.isEmpty) {
                 return Center(
@@ -347,7 +347,7 @@ class _HomePageState extends State<HomePage> {
               );
             }
 
-            var data = snapshot.data!;
+            List<String> data = snapshot.data ?? [];
             return ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: data.length,
