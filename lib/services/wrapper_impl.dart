@@ -145,6 +145,12 @@ Future<List<String>> getAllCourses() async {
   return courses.toList();
 }
 
+Future<void> refreshCaches() async {
+  await objectBox.lessonBox.removeAllAsync();
+  cachedLessons.clear();
+  await cacheLessons();
+}
+
 Future<List<Lesson>> getLessons() async {
   debugPrint("getting lessons from api");
   var lessons = await wrapper.fetchLessons(

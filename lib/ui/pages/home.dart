@@ -9,7 +9,6 @@ import 'package:unipi_orario/entities/lesson.dart';
 import 'package:unipi_orario/helper/object_box.dart';
 import 'package:unipi_orario/services/internal_api.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
-import 'package:unipi_orario/services/routes.dart';
 import 'package:unipi_orario/services/wrapper_impl.dart';
 import 'package:unipi_orario/ui/components/home/event.dart';
 import 'package:unipi_orario/utils/globals.dart' as globals;
@@ -34,6 +33,7 @@ class _HomePageState extends State<HomePage> {
   int currentPageValue = 10000;
 
   late Future<List<String>> futureWithCourses;
+  bool refreshing = false;
 
   @override
   void initState() {
@@ -42,16 +42,24 @@ class _HomePageState extends State<HomePage> {
     futureWithCourses = getAllCourses();
   }
 
+  Future<void> refreshData() async {
+    setState(() {
+      refreshing = true;
+    });
+
+    await refreshCaches();
+    futureWithCourses = getAllCourses();
+
+    setState(() {
+      refreshing = false;
+    });
+  }
+
   PreferredSizeWidget appBar() {
     return AppBar(
       leading: IconButton(
-        icon: const Hero(
-          tag: 'infoIcon',
-          child: Icon(Icons.info_outline),
-        ),
-        onPressed: () {
-          Get.toNamed(RouteGenerator.settingsPageRoute);
-        },
+        icon: const Icon(Icons.refresh),
+        onPressed: refreshData,
       ),
       actions: [
         ThemeSwitcher(
@@ -224,7 +232,7 @@ class _HomePageState extends State<HomePage> {
           return FutureBuilder(
             future: getLessonsForDay(date),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
+              if (snapshot.connectionState == ConnectionState.waiting || refreshing) {
                 Lesson fakeLesson = Lesson(
                   courseName: "Corso b",
                   endDateTime: DateTime.now(),
@@ -324,7 +332,7 @@ class _HomePageState extends State<HomePage> {
         child: FutureBuilder(
           future: futureWithCourses,
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
+            if (snapshot.connectionState == ConnectionState.waiting || refreshing) {
               List<String> data = ["CORSO A", "CORSO B", "CORSO C"];
               int randomIdx = Random().nextInt(data.length - 1);
 
