@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:unipi_orario/entities/lesson.dart';
@@ -60,12 +62,7 @@ Future<List<Lesson>> getLessonsForWeek(
   }
 
   if (cachedLessons.isEmpty) {
-    await cacheWeekLessons(
-      startDay: weekStart.subtract(Duration(days: 7 * depth)),
-      endDay: weekStart.add(Duration(days: 7 * depth)),
-    );
-
-    return cachedLessons[weekStartStr]!;
+    depth = max(depth, 2);
   }
 
   for (int i = 0; i < depth; i++) {
