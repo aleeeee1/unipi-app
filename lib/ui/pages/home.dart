@@ -199,20 +199,25 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               if (!isToday)
-                IconButton(
-                  onPressed: () {
-                    _controller.animateToCurrentData();
+                SizedBox(
+                  height: 30,
+                  child: IconButton(
+                    iconSize: 20,
+                    visualDensity: VisualDensity.compact,
+                    onPressed: () {
+                      _controller.animateToCurrentData();
 
-                    setState(() {
-                      currentDate = DateTime.now();
-                    });
+                      setState(() {
+                        currentDate = DateTime.now();
+                      });
 
-                    // TODO: refactor this too in a way that actually makes sense.
-                    int toJump = currentPageValue + currentDate.difference(DateTime.now()).inDays;
-                    if (currentDate.isAfter(DateTime.now())) toJump++;
-                    _pageController.jumpToPage(toJump);
-                  },
-                  icon: const Icon(Icons.restore),
+                      // TODO: refactor this too in a way that actually makes sense.
+                      int toJump = currentPageValue + currentDate.difference(DateTime.now()).inDays;
+                      if (currentDate.isAfter(DateTime.now())) toJump++;
+                      _pageController.jumpToPage(toJump);
+                    },
+                    icon: const Icon(Icons.restore),
+                  ),
                 )
             ],
           ),
