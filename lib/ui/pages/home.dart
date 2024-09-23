@@ -289,7 +289,7 @@ class _HomePageState extends State<HomePage> {
               }
 
               lessons = lessons.where((element) {
-                return internalAPI.filteringCourses.contains(element!.courseName);
+                return !internalAPI.filteringCourses.contains(element!.courseName);
               }).toList();
               return Padding(
                 padding: const EdgeInsets.symmetric(
@@ -356,12 +356,12 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(right: 7),
                   child: FilterChip(
                     label: Text(data[index]),
-                    selected: internalAPI.filteringCourses.contains(data[index]),
+                    selected: !internalAPI.filteringCourses.contains(data[index]),
                     onSelected: (bool value) {
                       if (value) {
-                        internalAPI.addFilteringCourse(data[index]);
-                      } else {
                         internalAPI.removeFilteringCourse(data[index]);
+                      } else {
+                        internalAPI.addFilteringCourse(data[index]);
                       }
                       setState(() {});
                     },
