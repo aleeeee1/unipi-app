@@ -24,6 +24,7 @@ class InternalAPI {
   set isDynamicTheme(bool value) => prefs.setBool('isDynamicTheme', value);
   set calendarId(String value) => prefs.setString('calendarId', value);
   set clientId(String value) => prefs.setString('clientId', value);
+  set filteringCourses(List<String> value) => prefs.setStringList('filteringCourses', value);
 
   void addFilteringCourse(String course) {
     List<String> courses = filteringCourses;

@@ -55,12 +55,93 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Widget refreshButton() {
+    Widget changeCalendarDialog() {
+      String currentText = internalAPI.calendarId;
+
+      return AlertDialog(
+        title: Text(
+          FlutterI18n.translate(
+            context,
+            "refreshDialog.title",
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: TextField(
+                controller: TextEditingController(text: internalAPI.calendarId),
+                onChanged: (value) {
+                  currentText = value;
+                },
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              subtitle: Text(
+                FlutterI18n.translate(
+                  context,
+                  "refreshDialog.subtitle",
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          if (globals.calendarId != internalAPI.calendarId)
+            TextButton(
+              onPressed: () {
+                internalAPI.calendarId = globals.calendarId;
+                internalAPI.filteringCourses = [];
+                Get.back();
+              },
+              child: Text(
+                FlutterI18n.translate(
+                  context,
+                  "refreshDialog.reset",
+                ),
+              ),
+            ),
+          TextButton(
+            onPressed: () {
+              internalAPI.calendarId = currentText;
+              internalAPI.filteringCourses = [];
+              Get.back();
+            },
+            child: Text(
+              FlutterI18n.translate(
+                context,
+                "refreshDialog.confirm",
+              ),
+            ),
+          ),
+          FilledButton.tonal(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text(
+              FlutterI18n.translate(
+                context,
+                "refreshDialog.cancel",
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    return InkWell(
+      onTap: refreshData,
+      onLongPress: () => Get.dialog(changeCalendarDialog()),
+      borderRadius: BorderRadius.circular(30),
+      child: const Icon(Icons.refresh),
+    );
+  }
+
   PreferredSizeWidget appBar() {
     return AppBar(
-      leading: IconButton(
-        icon: const Icon(Icons.refresh),
-        onPressed: refreshData,
-      ),
+      leading: refreshButton(),
       actions: [
         ThemeSwitcher(
           builder: (ctx) => InkWell(

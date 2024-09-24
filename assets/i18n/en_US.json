@@ -15,5 +15,12 @@
     },
     "home": {
         "noEvents": "No events found for today"
+    },
+    "refreshDialog": {
+        "title": "Change calendar id",
+        "subtitle": "This app has been tested only with the IT calendar",
+        "confirm": "Save",
+        "cancel": "Cancel",
+        "reset": "Reset"
     }
 }

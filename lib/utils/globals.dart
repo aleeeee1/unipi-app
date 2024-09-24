@@ -8,7 +8,7 @@ var allThemes = <String, ThemeData>{
   'light': lightCustomTheme,
 };
 
-var errorFaces = [
+const errorFaces = [
   "(･o･;)",
   "Σ(ಠ_ಠ)",
   "ಥ_ಥ",
@@ -16,9 +16,11 @@ var errorFaces = [
   "(｡･ω･｡)",
 ];
 
-var randomFaces = [
+const randomFaces = [
   "(・_・ヾ",
   "(´･_･`)",
   "(•ิ_•ิ)?",
   "( ・◇・)？",
 ];
+
+const String calendarId = "6319d930e209821793111b45";

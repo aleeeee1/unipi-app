@@ -15,5 +15,12 @@
     },
     "home": {
         "noEvents": "Nessun evento trovato per oggi"
+    },
+    "refreshDialog": {
+        "title": "Cambia id calendario",
+        "subtitle": "Quest'app è stata testata solo con il calendario di Informatica",
+        "confirm": "Salva",
+        "cancel": "Annulla",
+        "reset": "Reset"
     }
 }
