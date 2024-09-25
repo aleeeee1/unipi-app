@@ -789,9 +789,11 @@ packages:
   unipi_orario_wrapper:
     dependency: "direct main"
     description:
-      path: "../wrapper"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "0b152460ca9a88a3194c873533a1f76c7890ab6a"
+      url: "https://github.com/UniPi-Orari/api-wrapper"
+    source: git
     version: "1.0.0"
   universal_io:
     dependency: "direct main"
