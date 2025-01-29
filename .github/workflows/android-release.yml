@@ -35,7 +35,7 @@ jobs:
 
       - name: Setup key.properties
         run: |
-          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > app-key/key.properties
+          echo "storeFile=../../${{ steps.android_keystore.outputs.filePath }}" > app-key/key.properties
           echo "storePassword=${{ env.SIGNING_KEYSTORE_PASSWORD }}" >> app-key/key.properties
           echo "keyPassword=${{ env.SIGNING_KEY_PASSWORD }}" >> app-key/key.properties
           echo "keyAlias=${{ env.SIGNING_KEY_ALIAS }}" >> app-key/key.properties
