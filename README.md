@@ -58,7 +58,7 @@ It is designed to be simple and easy to use, with a clean and modern interface, 
 > probably it won't work :c
 
 # Download the app
-**WIP** ¯\\\_(ツ)\_/¯
+You can download the app from [release page](https://github.com/UniPi-Orari/app/releases/latest)
 
 # Building from source
 
