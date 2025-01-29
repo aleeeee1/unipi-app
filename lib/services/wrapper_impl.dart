@@ -139,7 +139,7 @@ Future<List<String>> getAllCourses() async {
 
   Set<String> courses = {};
   for (var lesson in lessons) {
-    courses.add(lesson.courseName);
+    courses.add(lesson.courseName ?? lesson.name);
   }
 
   return courses.toList();

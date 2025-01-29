@@ -383,7 +383,7 @@ class _HomePageState extends State<HomePage> {
               }
 
               lessons = lessons.where((element) {
-                return !internalAPI.filteringCourses.contains(element!.courseName);
+                return element != null && !internalAPI.filteringCourses.contains(element.courseName ?? element.name);
               }).toList();
               return Padding(
                 padding: const EdgeInsets.symmetric(

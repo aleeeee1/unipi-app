@@ -122,7 +122,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (Lesson object, fb.Builder fbb) {
           final nameOffset = fbb.writeString(object.name);
-          final courseNameOffset = fbb.writeString(object.courseName);
+          final courseNameOffset = object.courseName == null
+              ? null
+              : fbb.writeString(object.courseName!);
           final roomNameOffset = fbb.writeString(object.roomName);
           fbb.startTable(7);
           fbb.addInt64(0, object.id);
@@ -144,7 +146,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final endDateTimeParam = DateTime.fromMillisecondsSinceEpoch(
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0));
           final courseNameParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 8, '');
+              .vTableGetNullable(buffer, rootOffset, 8);
           final roomNameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 14, '');
           final object = Lesson(

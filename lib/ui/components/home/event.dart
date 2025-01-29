@@ -37,7 +37,7 @@ class EventState extends State<Event> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
-              widget.lesson.courseName,
+              widget.lesson.courseName ?? "Nessun corso",
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: Theme.of(context).colorScheme.secondary.withOpacity(
                           0.5,

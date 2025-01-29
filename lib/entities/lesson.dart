@@ -7,7 +7,7 @@ class Lesson {
   int id = 0;
 
   final String name;
-  final String courseName;
+  final String? courseName;
   final String roomName;
 
   @Property(type: PropertyType.date)
@@ -20,7 +20,7 @@ class Lesson {
     required this.name,
     required this.startDateTime,
     required this.endDateTime,
-    required this.courseName,
+    this.courseName,
     required this.roomName,
   });
 
@@ -31,7 +31,7 @@ class Lesson {
       name: json['nome'],
       startDateTime: parsedDates[0],
       endDateTime: parsedDates[1],
-      courseName: json['fattoreDiPartizione'][0]['partizioni'][0]['descrizione'],
+      courseName: json['fattoreDiPartizione'].length > 0 ? json['fattoreDiPartizione'][0]['partizioni'][0]['descrizione'] : null,
       roomName: json['aule'][0]['descrizione'],
     );
   }
