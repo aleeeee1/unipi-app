@@ -15,9 +15,6 @@ jobs:
       SIGNING_KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
       SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
       SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
-      GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
-      GOOGLE_SERVICE_INFO: ${{ secrets.GOOGLE_SERVICE_INFO }}
-      FIREBASE_OPTIONS: ${{ secrets.FIREBASE_OPTIONS }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,42 +29,47 @@ jobs:
       - name: Get key_store from b64
         id: android_keystore
         run: |
-          mkdir -p android/app
-          echo "${{ env.SIGNING_KEYSTORE }}" | base64 --decode > android/app/key_store.jks
-          echo "filePath=android/app/key_store.jks" >> $GITHUB_OUTPUT
+          mkdir -p app-key
+          echo "${{ env.SIGNING_KEYSTORE }}" | base64 --decode > app-key/key_store.jks
+          echo "filePath=app-key/key_store.jks" >> $GITHUB_OUTPUT
 
       - name: Setup key.properties
         run: |
-          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
-          echo "storePassword=${{ env.SIGNING_KEYSTORE_PASSWORD }}" >> android/key.properties
-          echo "keyPassword=${{ env.SIGNING_KEY_PASSWORD }}" >> android/key.properties
-          echo "keyAlias=${{ env.SIGNING_KEY_ALIAS }}" >> android/key.properties
+          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > app-key/key.properties
+          echo "storePassword=${{ env.SIGNING_KEYSTORE_PASSWORD }}" >> app-key/key.properties
+          echo "keyPassword=${{ env.SIGNING_KEY_PASSWORD }}" >> app-key/key.properties
+          echo "keyAlias=${{ env.SIGNING_KEY_ALIAS }}" >> app-key/key.properties
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: "23"
-          distribution: "zulu"
-          cache: gradle
-          check-latest: true
+      - name: Debug
+        run: |
+          ls -la app-key/
+          cat app-key/key.properties
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: "stable"
-          flutter-version: "3.22.3"
-          cache: false
+      # - name: Setup Java
+      #   uses: actions/setup-java@v4
+      #   with:
+      #     java-version: "23"
+      #     distribution: "zulu"
+      #     cache: gradle
+      #     check-latest: true
 
-      - run: flutter clean
-      - run: flutter pub get
-      - run: flutter build apk
+      # - name: Setup Flutter
+      #   uses: subosito/flutter-action@v2
+      #   with:
+      #     channel: "stable"
+      #     flutter-version: "3.22.3"
+      #     cache: false
 
-      - name: Create a Release APK
-        uses: marvinpinto/action-automatic-releases@latest
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          automatic_release_tag: ${{ steps.version.outputs.version }}
-          title: "Release ${{ steps.version.outputs.version }}"
-          prerelease: false
-          files: |
-            build/app/outputs/apk/release/app-release.apk
+      # - run: flutter clean
+      # - run: flutter pub get
+      # - run: flutter build apk
+
+      # - name: Create a Release APK
+      #   uses: marvinpinto/action-automatic-releases@latest
+      #   with:
+      #     repo_token: ${{ secrets.GITHUB_TOKEN }}
+      #     automatic_release_tag: ${{ steps.version.outputs.version }}
+      #     title: "Release ${{ steps.version.outputs.version }}"
+      #     prerelease: false
+      #     files: |
+      #       build/app/outputs/apk/release/app-release.apk
